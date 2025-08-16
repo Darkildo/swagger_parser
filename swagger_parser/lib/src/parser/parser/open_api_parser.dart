@@ -1678,7 +1678,7 @@ class OpenApiParser {
     if (!map.containsKey(_tagsConst)) {
       return true;
     }
-
+    print(map[_tagsConst]);
     final tags = (map[_tagsConst] as List<dynamic>).map((e) => e as String);
 
     if (config.includeTags.isNotEmpty) {
