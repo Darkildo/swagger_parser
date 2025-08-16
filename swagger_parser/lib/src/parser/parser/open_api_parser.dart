@@ -578,8 +578,16 @@ class OpenApiParser {
       pathValue.forEach((key, requestPath) {
         // check if this requestPath has any tags that
         // define wether the requestPath should be included
-        if (!_includeTag(requestPath as Map<String, dynamic>)) {
-          return;
+
+        try {
+          if (!_includeTag(requestPath as Map<String, dynamic>)) {
+            return;
+          }
+        } catch (e) {
+          print(requestPath.runtimeType);
+          requestPath.forEach((e, s) => print('$e:$s'));
+
+          throw e;
         }
 
         // `servers` contains List<dynamic>
@@ -1675,23 +1683,17 @@ class OpenApiParser {
   /// If the tag is neither included nor excluded or if there is no tag at all,
   /// it will return true.
   bool _includeTag(Map<String, dynamic> map) {
-    try {
-      if (!map.containsKey(_tagsConst)) {
-        return true;
-      }
+    if (!map.containsKey(_tagsConst)) {
+      return true;
+    }
 
-      final tags = (map[_tagsConst] as List<dynamic>).map((e) => e.toString());
-      if (config.includeTags.isNotEmpty) {
-        return config.includeTags.any(tags.contains);
-      }
+    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e.toString());
+    if (config.includeTags.isNotEmpty) {
+      return config.includeTags.any(tags.contains);
+    }
 
-      if (config.excludeTags.isNotEmpty) {
-        return !config.excludeTags.any(tags.contains);
-      }
-    } catch (e, s) {
-      map.forEach((e, s) => print('$e:$s'));
-
-      throw e;
+    if (config.excludeTags.isNotEmpty) {
+      return !config.excludeTags.any(tags.contains);
     }
 
     return true;
