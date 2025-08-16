@@ -585,6 +585,7 @@ class OpenApiParser {
           }
         } catch (e) {
           print(requestPath.runtimeType);
+          print(requestPath);
           requestPath.forEach((e, s) => print('$e:$s'));
 
           throw e;
