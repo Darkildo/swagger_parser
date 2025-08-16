@@ -1678,15 +1678,21 @@ class OpenApiParser {
     if (!map.containsKey(_tagsConst)) {
       return true;
     }
-    print(map[_tagsConst].runtimeType);
-    final tags = (map[_tagsConst] as List<dynamic>).map((e) => e.toString());
-    print(tags.runtimeType);
-    if (config.includeTags.isNotEmpty) {
-      return config.includeTags.any(tags.contains);
-    }
+    try {
+      print(map[_tagsConst].runtimeType);
+      final tags = (map[_tagsConst] as List<dynamic>).map((e) => e.toString());
+      print(tags.runtimeType);
+      if (config.includeTags.isNotEmpty) {
+        return config.includeTags.any(tags.contains);
+      }
 
-    if (config.excludeTags.isNotEmpty) {
-      return !config.excludeTags.any(tags.contains);
+      if (config.excludeTags.isNotEmpty) {
+        return !config.excludeTags.any(tags.contains);
+      }
+    } catch (e, s) {
+      map.forEach((e, s) => print('$e:$s'));
+
+      throw e;
     }
 
     return true;
