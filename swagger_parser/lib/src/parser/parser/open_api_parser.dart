@@ -1675,13 +1675,12 @@ class OpenApiParser {
   /// If the tag is neither included nor excluded or if there is no tag at all,
   /// it will return true.
   bool _includeTag(Map<String, dynamic> map) {
-    if (!map.containsKey(_tagsConst)) {
-      return true;
-    }
     try {
-      print(map[_tagsConst].runtimeType);
+      if (!map.containsKey(_tagsConst)) {
+        return true;
+      }
+
       final tags = (map[_tagsConst] as List<dynamic>).map((e) => e.toString());
-      print(tags.runtimeType);
       if (config.includeTags.isNotEmpty) {
         return config.includeTags.any(tags.contains);
       }
